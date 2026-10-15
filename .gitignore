@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.playwright-cli/
+test-results/
+playwright-report/
+.DS_Store
+
+# Local working notes (briefs, research, process logs); never committed
+/docs/internal/
+/*_BRIEF.md
+/*-brief.md
