@@ -1,0 +1,17 @@
+---
+interface Props {
+  position: "top" | "bottom";
+  color?: string;
+  slow?: boolean;
+}
+const { position, color = "var(--ink)", slow = false } = Astro.props;
+// Two identical wave periods so a -50% translate loops seamlessly.
+const d = "M0 60 C 90 20 210 20 300 50 S 510 95 600 55 S 810 15 900 50 S 1110 95 1200 60 L1200 120 L0 120 Z";
+---
+
+<div class:list={["liquid-edge", `liquid-edge--${position}`, { "liquid-edge--slow": slow }]} style={`--edge:${color}`} aria-hidden="true">
+  <svg viewBox="0 0 2400 120" preserveAspectRatio="none">
+    <path d={d} fill="currentColor"></path>
+    <path d={d} fill="currentColor" transform="translate(1200 0)"></path>
+  </svg>
+</div>

@@ -1,0 +1,122 @@
+---
+import { content, whatsappHref } from "@/content/freshcan-content";
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+const { nav, contact } = content;
+---
+
+<header class="header" data-header>
+  <a class="header__logo" href="#inicio" aria-label="Fresh Can — inicio" data-nav-link>
+    <Logo />
+  </a>
+  <div class="header__actions">
+    <a class="header__wa" href={whatsappHref(contact.whatsappGreeting)} target="_blank" rel="noopener" aria-label="WhatsApp">
+      <Icon name="whatsapp" />
+    </a>
+    <button class="header__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+      <span class="header__menu-label" data-open-label>{nav.menuLabel}</span>
+      <span class="header__menu-label" data-close-label aria-hidden="true">{nav.closeLabel}</span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 80;
+    height: var(--header-h);
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    color: var(--ink);
+    transition: color 0.35s var(--ease-out);
+  }
+  .header > * {
+    pointer-events: auto;
+  }
+  .header__logo :global(.logo) {
+    width: clamp(3.4rem, 4.6vw, 4.6rem);
+    height: auto;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .header__logo:hover :global(.logo) {
+    transform: rotate(-6deg) scale(1.05);
+  }
+  .header__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .header__wa,
+  .header__menu {
+    height: 2.6rem;
+    border-radius: 0.6rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    transition:
+      background 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out);
+  }
+  .header__wa {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+  }
+  .header__wa :global(svg) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  .header__menu {
+    position: relative;
+    min-width: 6.4rem;
+    padding: 0 1.1rem;
+    overflow: hidden;
+    font-family: var(--f-display);
+    font-variation-settings: "wdth" 75;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .header__menu-label {
+    display: block;
+    transition: transform 0.45s var(--ease-out);
+  }
+  [data-close-label] {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transform: translateY(110%);
+  }
+  .header__wa:hover,
+  .header__menu:hover {
+    background: var(--lime);
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  :global(html.menu-open) .header__menu [data-open-label] {
+    transform: translateY(-110%);
+  }
+  :global(html.menu-open) .header__menu [data-close-label] {
+    transform: none;
+  }
+  /* Inverted over ink sections and while the menu is open */
+  .header.is-dark,
+  :global(html.menu-open) .header {
+    color: var(--paper);
+  }
+  .header.is-dark .header__wa,
+  .header.is-dark .header__menu,
+  :global(html.menu-open) .header__wa,
+  :global(html.menu-open) .header__menu {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+</style>

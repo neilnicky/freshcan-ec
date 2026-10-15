@@ -1,0 +1,120 @@
+---
+import { content, whatsappHref } from "@/content/freshcan-content";
+import Logo from "./Logo.astro";
+const { nav, contact, brand } = content;
+---
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label={nav.menuLabel} hidden data-menu>
+  <div class="menu__ghost" aria-hidden="true"><Logo /></div>
+  <nav class="menu__nav" aria-label={nav.menuLabel}>
+    <ul>
+      {
+        nav.items.map((item, i) => (
+          <li class="line" style={`--i:${i}`}>
+            <a href={item.href} data-nav-link>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <div class="menu__contact">
+    <p class="note">{nav.contactTitle}</p>
+    <a href={whatsappHref(contact.whatsappGreeting)} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay}</a>
+    <a href={contact.instagram} target="_blank" rel="noopener">Instagram {brand.handle}</a>
+  </div>
+</div>
+
+<style>
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    justify-items: center;
+    padding: calc(var(--header-h) + 2vh) var(--gutter) 2.2rem;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-out);
+    overflow: hidden;
+  }
+  .menu[hidden] {
+    display: none;
+  }
+  :global(html.menu-open) .menu {
+    opacity: 1;
+  }
+  .menu__ghost {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: min(92vw, 120vh);
+    transform: translate(-50%, -50%) rotate(-8deg) scale(0.92);
+    color: var(--palm);
+    opacity: 0.55;
+    transition: transform 1.2s var(--ease-out);
+    pointer-events: none;
+  }
+  :global(html.menu-open) .menu__ghost {
+    transform: translate(-50%, -50%) rotate(-4deg) scale(1);
+  }
+  .menu__ghost :global(.logo) {
+    width: 100%;
+    height: auto;
+  }
+  .menu__nav {
+    position: relative;
+    align-self: center;
+    text-align: center;
+  }
+  .menu__nav a {
+    display: block;
+    font-family: var(--f-display);
+    font-variation-settings: "wdth" 75;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: clamp(3rem, 8.4vw, 7.6rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    transition: color 0.3s var(--ease-out);
+  }
+  .menu__nav a:hover,
+  .menu__nav a:focus-visible {
+    color: var(--lime);
+  }
+  .menu__nav .line > a > span {
+    display: inline-block;
+    transform: translateY(105%);
+    transition: transform 0.7s var(--ease-out);
+    transition-delay: calc(var(--i) * 60ms + 120ms);
+  }
+  .menu__nav .line {
+    overflow: hidden;
+  }
+  :global(html.menu-open) .menu__nav .line > a > span {
+    transform: none;
+  }
+  .menu__contact {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 1.6rem;
+    font-size: var(--t-small);
+    text-align: center;
+  }
+  .menu__contact .note {
+    width: 100%;
+    color: var(--lime);
+  }
+  .menu__contact a {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    text-decoration-color: rgb(244 246 245 / 0.35);
+  }
+  .menu__contact a:hover {
+    text-decoration-color: var(--lime);
+  }
+</style>

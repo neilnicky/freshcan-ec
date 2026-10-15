@@ -1,0 +1,226 @@
+---
+import { content } from "@/content/freshcan-content";
+import Img from "./Img.astro";
+const { scene } = content;
+---
+
+<section class="scene" id="la-lata" data-scene data-theme="paper" aria-labelledby="scene-title">
+  <div class="scene__pin">
+    <div class="scene__window" data-scene-window>
+      <Img item={scene.photo} widths={[640, 1000, 1400]} sizes="(max-width: 760px) 90vw, 46vw" />
+    </div>
+
+    <h2 class="scene__title section-title" id="scene-title" data-reveal>
+      {
+        scene.titleLines.map((l, i) => (
+          <span class="line" style={`--i:${i}`}>
+            <span>{l}</span>
+          </span>
+        ))
+      }
+    </h2>
+
+    <p class="scene__body body" data-scene-body>{scene.body}</p>
+
+    <ul class="scene__badges" aria-label="Fresh Can">
+      {
+        scene.badges.map((b, i) => (
+          <li class="badge" data-badge style={`--n:${i}`}>
+            <strong>{b.value}</strong>
+            <span>{b.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="scene__progress" aria-hidden="true">
+      <div class="scene__progress-row label">
+        <span data-progress-state>{scene.progress.from}</span>
+        <span><span data-progress-ml>000</span> {scene.progress.unit}</span>
+      </div>
+      <div class="scene__bar"><span data-progress-bar></span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .scene {
+    position: relative;
+    height: 340vh;
+  }
+  .scene__pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: clip;
+    padding: calc(var(--header-h) + 2vh) var(--gutter) 2rem;
+  }
+  /* Sits behind the can (70% across) so the clear can shows the coconuts through it. */
+  .scene__window {
+    position: absolute;
+    left: 70%;
+    top: 50%;
+    width: min(34vw, 62vh);
+    height: 82vh;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    overflow: hidden;
+    clip-path: inset(calc(50% - var(--o, 0) * 50%) calc(50% - var(--o, 0) * 50%) round 999px);
+    z-index: 1;
+  }
+  .scene__window :global(img) {
+    transform-origin: 92% 0%;
+    transform: scale(calc(3 - var(--o, 0) * 0.25));
+  }
+  .scene__title {
+    position: relative;
+    z-index: 6;
+    max-width: 8ch;
+  }
+  .scene__body {
+    position: absolute;
+    z-index: 6;
+    left: var(--gutter);
+    bottom: 7.5rem;
+    opacity: var(--b, 0);
+    transform: translateY(calc((1 - var(--b, 0)) * 1.5rem));
+  }
+  .scene__badges {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .badge {
+    --size: clamp(6.4rem, 9.2vw, 9.2rem);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--size);
+    height: var(--size);
+    margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2.5px solid var(--ink);
+    box-shadow: 3px 4px 0 var(--ink);
+    opacity: 0;
+    will-change: transform;
+  }
+  .badge:nth-child(odd) {
+    background: var(--lime);
+    color: var(--ink);
+  }
+  .badge strong {
+    font-family: var(--f-display);
+    font-variation-settings: "wdth" 75;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 3vw, 3rem);
+    line-height: 0.9;
+  }
+  .badge span {
+    font-size: clamp(0.72rem, 0.85vw, 0.9rem);
+    font-weight: 600;
+    max-width: 9ch;
+    line-height: 1.1;
+    margin-inline: auto;
+  }
+  .scene__progress {
+    position: absolute;
+    z-index: 6;
+    left: var(--gutter);
+    bottom: 2rem;
+    width: min(22rem, 40vw);
+  }
+  .scene__progress-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .scene__bar {
+    height: 6px;
+    border-radius: 6px;
+    background: rgb(17 18 16 / 0.12);
+    overflow: hidden;
+  }
+  .scene__bar span {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+    transform-origin: 0 50%;
+    transform: scaleX(var(--l, 0));
+  }
+
+  :global(html.static-scene) .scene {
+    height: auto;
+  }
+  :global(html.static-scene) .scene__pin {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    display: grid;
+    gap: 2rem;
+    align-content: start;
+  }
+  :global(html.static-scene) .scene__window {
+    --o: 1;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: min(100%, 34rem);
+    height: 60vh;
+    justify-self: end;
+  }
+  :global(html.static-scene) .scene__body {
+    position: static;
+    --b: 1;
+  }
+  :global(html.static-scene) .scene__badges {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  :global(html.static-scene) .badge {
+    position: relative;
+    margin: 0;
+    opacity: 1;
+  }
+  :global(html.static-scene) .scene__progress {
+    display: none;
+  }
+
+  @media (max-width: 760px), (max-width: 1100px) and (orientation: portrait) {
+    .scene__title {
+      text-align: center;
+      max-width: none;
+    }
+    .scene__window {
+      left: 50%;
+      width: 76vw;
+      height: 58vh;
+      top: 54%;
+    }
+    /* Under the title, clear of the lower badges */
+    .scene__body {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      z-index: 6;
+      margin: 0.8rem auto 0;
+      text-align: center;
+      max-width: 30ch;
+      font-size: 0.95rem;
+    }
+    .scene__progress {
+      width: auto;
+      right: var(--gutter);
+      bottom: 1.4rem;
+    }
+  }
+</style>

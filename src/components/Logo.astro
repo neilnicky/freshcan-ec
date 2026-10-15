@@ -1,0 +1,10 @@
+---
+import Svg from "@/assets/brand/freshcan-logo.svg";
+interface Props {
+  class?: string;
+  title?: string;
+}
+const { class: cls, title = "Fresh Can" } = Astro.props;
+---
+
+<Svg class:list={["logo", cls]} role="img" aria-label={title} />

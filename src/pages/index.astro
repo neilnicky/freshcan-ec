@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import Hero from "@/components/Hero.astro";
+import Scene from "@/components/Scene.astro";
+import Break from "@/components/Break.astro";
+import Manifesto from "@/components/Manifesto.astro";
+import Formats from "@/components/Formats.astro";
+import Collage from "@/components/Collage.astro";
+import Moments from "@/components/Moments.astro";
+import Ruta from "@/components/Ruta.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Base>
+  <main id="main" class="main">
+    <canvas class="protagonist" data-protagonist aria-hidden="true"></canvas>
+    <Hero />
+    <Scene />
+    <Break />
+    <Manifesto />
+    <Formats />
+    <Collage />
+    <Moments />
+    <Ruta />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .protagonist {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100lvh;
+    z-index: 5;
+    pointer-events: none;
+  }
+  /* Main sits above the sticky footer so the footer is revealed underneath. */
+  .main {
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+  }
+</style>

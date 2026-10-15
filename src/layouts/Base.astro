@@ -1,0 +1,96 @@
+---
+import "@/styles/global.css";
+import { getImage } from "astro:assets";
+import { content } from "@/content/freshcan-content";
+import { media } from "@/lib/media";
+import Header from "@/components/Header.astro";
+import Menu from "@/components/Menu.astro";
+import Loader from "@/components/Loader.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  showLoader?: boolean;
+}
+const { seo, brand, nav } = content;
+const { title = seo.title, description = seo.description, showLoader = true } = Astro.props;
+const og = await getImage({ src: media(seo.ogImage), width: 1200, height: 630, fit: "cover", format: "jpg" });
+const ogUrl = new URL(og.src, Astro.site ?? seo.canonical).href;
+const canonical = new URL(Astro.url.pathname, seo.canonical).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brand.name,
+  url: seo.canonical,
+  sameAs: [content.contact.instagram],
+  contactPoint: { "@type": "ContactPoint", telephone: `+${content.contact.whatsappNumber}`, contactType: "sales", areaServed: "EC" },
+};
+---
+
+<!doctype html>
+<html lang={seo.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content={seo.themeColor} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={brand.name} />
+    <meta property="og:locale" content={seo.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add("js");
+        var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduced) d.classList.add("reduced");
+        var seen = false;
+        try {
+          seen = sessionStorage.getItem("fc-loaded") === "1";
+        } catch (e) {}
+        if (!reduced && !seen && !location.hash && d.querySelector) d.classList.add("is-loading");
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{nav.skipLabel}</a>
+    {showLoader && <Loader />}
+    <Header />
+    <Menu />
+    <div class="wipe" aria-hidden="true"><span></span></div>
+    <slot />
+    <script>
+      import { boot } from "@/motion/main";
+      boot();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .wipe {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    display: grid;
+    place-items: center;
+  }
+  /* Can-shaped column wipe used by the loader and long anchor jumps. */
+  .wipe span {
+    display: block;
+    width: 18vw;
+    height: 120vh;
+    border-radius: 9vw;
+    background: var(--lime);
+    transform: translateX(-70vw) scaleX(0.4);
+    visibility: hidden;
+  }
+</style>

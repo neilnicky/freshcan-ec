@@ -1,0 +1,27 @@
+---
+import { Picture } from "astro:assets";
+import type { Media } from "@/content/freshcan-content";
+import { media } from "@/lib/media";
+
+interface Props {
+  item: Media;
+  widths: number[];
+  sizes: string;
+  class?: string;
+  eager?: boolean;
+}
+const { item, widths, sizes, class: cls, eager = false } = Astro.props;
+---
+
+<Picture
+  src={media(item.key)}
+  alt={item.alt}
+  widths={widths}
+  sizes={sizes}
+  formats={["avif", "webp"]}
+  class:list={["photo", cls]}
+  style={`--focus:${item.focus}`}
+  loading={eager ? "eager" : "lazy"}
+  fetchpriority={eager ? "high" : "auto"}
+  decoding="async"
+/>

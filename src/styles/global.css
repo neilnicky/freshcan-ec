@@ -1,0 +1,387 @@
+@import "@fontsource-variable/bricolage-grotesque/wdth.css";
+@import "@fontsource-variable/instrument-sans/wdth.css";
+@import "@fontsource-variable/instrument-sans/wdth-italic.css";
+
+:root {
+  --ink: #111210;
+  --paper: #f4f6f5;
+  --mist: #e6e9e7;
+  --steel: #c9cfd4;
+  --milk: #eef1ea;
+  --husk: #7a8369;
+  --palm: #3c4618;
+  --lime: #a8d214;
+  --ink-60: rgb(17 18 16 / 0.62);
+  --paper-70: rgb(244 246 245 / 0.72);
+
+  --f-display: "Bricolage Grotesque Variable", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Instrument Sans Variable", "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  --gutter: clamp(1rem, 2vw, 2.25rem);
+  --t-display: clamp(3.4rem, 9.4vw, 11rem);
+  --t-section: clamp(2.7rem, 7.6vw, 9rem);
+  --t-body: clamp(1rem, 1.32vw, 1.3rem);
+  --t-small: clamp(0.82rem, 0.95vw, 0.95rem);
+  --t-label: 0.78rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --radius: clamp(1rem, 1.6vw, 1.75rem);
+  --header-h: 4.5rem;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --gutter: 1.1rem;
+    --t-display: clamp(3.1rem, 15.5vw, 5.4rem);
+    --t-section: clamp(2.6rem, 13vw, 4.6rem);
+    --header-h: 4rem;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+body {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: var(--t-body);
+  line-height: 1.38;
+  letter-spacing: -0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  background: var(--paper);
+}
+
+img,
+svg,
+canvas,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.theme-paper :focus-visible,
+[data-theme="paper"] :focus-visible {
+  outline-color: var(--ink);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 1000;
+  padding: 0.7rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  font-size: var(--t-small);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Type ---------- */
+
+.display {
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 75;
+  font-weight: 800;
+  font-size: var(--t-display);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+.section-title {
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 75;
+  font-weight: 800;
+  font-size: var(--t-section);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+.label {
+  font-family: var(--f-display);
+  font-variation-settings: "wdth" 100;
+  font-weight: 700;
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.note {
+  font-style: italic;
+  font-weight: 450;
+}
+.body {
+  font-size: var(--t-body);
+  max-width: 34ch;
+  font-weight: 500;
+}
+
+/* ---------- Masked line reveal ---------- */
+
+.lines {
+  display: block;
+}
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+.line > span {
+  display: inline-block;
+  transform: translateY(105%);
+  transition: transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms + var(--d, 0ms));
+}
+.is-in .line > span,
+.line.is-in > span {
+  transform: none;
+}
+[data-fade] {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 0.8s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms + var(--d, 0ms));
+}
+.is-in[data-fade],
+.is-in [data-fade] {
+  opacity: 1;
+  transform: none;
+}
+html:not(.js) .line > span,
+html:not(.js) [data-fade] {
+  transform: none;
+  opacity: 1;
+}
+
+/* ---------- Stickers & buttons (brand: black-outlined rounded labels) ---------- */
+
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.18em 0.42em 0.12em;
+  border: 0.09em solid var(--ink);
+  border-radius: 0.32em;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0.06em 0.08em 0 var(--ink);
+  transform: rotate(var(--rot, -3deg));
+}
+.sticker--lime {
+  background: var(--lime);
+}
+.sticker--ink {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--paper);
+  box-shadow: 0.06em 0.08em 0 var(--paper);
+}
+
+.pill {
+  --bg: var(--ink);
+  --fg: var(--paper);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font-weight: 600;
+  font-size: var(--t-small);
+  letter-spacing: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border: 2px solid var(--bg);
+  transition: color 0.4s var(--ease-out);
+}
+.pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--lime);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 0.45s var(--ease-out);
+}
+.pill:hover::before,
+.pill:focus-visible::before {
+  transform: none;
+}
+.pill:hover,
+.pill:focus-visible {
+  color: var(--ink);
+}
+.pill--ghost {
+  --bg: transparent;
+  --fg: currentColor;
+  border-color: currentColor;
+}
+.pill--light {
+  --bg: var(--paper);
+  --fg: var(--ink);
+}
+.pill svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+.round-btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  transition:
+    background 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out);
+}
+.round-btn:hover,
+.round-btn:focus-visible {
+  background: var(--lime);
+  color: var(--ink);
+  transform: scale(1.06);
+}
+.round-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* ---------- Liquid edge: wave that rises between paper and ink sections ---------- */
+
+.liquid-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(2.5rem, 6vw, 6rem);
+  pointer-events: none;
+  overflow: hidden;
+  color: var(--edge, var(--ink));
+}
+.liquid-edge svg {
+  width: 200%;
+  max-width: none;
+  height: 100%;
+  animation: wave 9s linear infinite;
+}
+.liquid-edge--top {
+  bottom: calc(100% - 1px);
+}
+.liquid-edge--bottom {
+  top: calc(100% - 1px);
+  transform: scaleY(-1);
+}
+.liquid-edge--slow svg {
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+@keyframes wave {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Media ---------- */
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus, 50% 50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+  .line > span,
+  [data-fade] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

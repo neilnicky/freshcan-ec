@@ -1,0 +1,122 @@
+---
+import { content } from "@/content/freshcan-content";
+import Img from "./Img.astro";
+import Icon from "./Icon.astro";
+const { collage } = content;
+// Per-photo placement: rotation (deg) and scroll speed (px per px of scroll).
+const layout = [
+  { rot: -7, speed: 0.08 },
+  { rot: 5, speed: -0.06 },
+  { rot: -3, speed: 0.14 },
+  { rot: 8, speed: -0.02 },
+];
+---
+
+<section class="collage" id="planes" data-theme="paper" aria-labelledby="collage-title">
+  <div class="collage__text">
+    <h2 class="section-title" id="collage-title" data-reveal>
+      {
+        collage.title.map((l, i) => (
+          <span class="line" style={`--i:${i}`}>
+            <span>{l}</span>
+          </span>
+        ))
+      }
+    </h2>
+    <div class="collage__aside" data-reveal>
+      <p class="body" data-fade style="--i:3">{collage.body}</p>
+      <a class="pill pill--ghost" href={collage.cta.href} target="_blank" rel="noopener" data-fade style="--i:4">
+        <Icon name="instagram" />{collage.cta.label}
+      </a>
+    </div>
+  </div>
+  <div class="collage__stack">
+    {
+      collage.photos.map((p, i) => (
+        <figure class={`polaroid polaroid--${i}`} data-parallax={layout[i]!.speed} style={`--rot:${layout[i]!.rot}deg`}>
+          <div class="polaroid__img">
+            <Img item={p} widths={[400, 700, 1000]} sizes="(max-width: 760px) 60vw, 26vw" />
+          </div>
+        </figure>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .collage {
+    position: relative;
+    padding: clamp(7rem, 14vw, 14rem) var(--gutter) clamp(5rem, 10vw, 10rem);
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 2rem;
+    align-items: center;
+    overflow: clip;
+  }
+  .collage__text {
+    display: grid;
+    gap: 2.4rem;
+    align-content: center;
+  }
+  .collage__aside {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+  }
+  .collage__stack {
+    position: relative;
+    height: clamp(30rem, 62vw, 56rem);
+  }
+  .polaroid {
+    position: absolute;
+    width: 46%;
+    padding: 0.7rem 0.7rem 2.2rem;
+    background: #fff;
+    border-radius: 0.4rem;
+    box-shadow: 0 1.6rem 3rem -1.6rem rgb(17 18 16 / 0.45);
+    rotate: var(--rot);
+    will-change: transform;
+  }
+  .polaroid__img {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 0.2rem;
+    background: var(--mist);
+  }
+  .polaroid--0 {
+    left: 2%;
+    top: 4%;
+    z-index: 2;
+  }
+  .polaroid--1 {
+    right: 0;
+    top: 0;
+    width: 40%;
+  }
+  .polaroid--2 {
+    left: 28%;
+    top: 34%;
+    z-index: 3;
+  }
+  .polaroid--3 {
+    right: 2%;
+    bottom: 0;
+    width: 38%;
+    z-index: 1;
+  }
+  @media (max-width: 860px) {
+    .collage {
+      grid-template-columns: 1fr;
+    }
+    .collage__stack {
+      height: 120vw;
+    }
+    .polaroid {
+      width: 56%;
+    }
+    .polaroid--1,
+    .polaroid--3 {
+      width: 50%;
+    }
+  }
+</style>

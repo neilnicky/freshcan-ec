@@ -1,0 +1,100 @@
+---
+import { content } from "@/content/freshcan-content";
+import Logo from "./Logo.astro";
+const { loader } = content;
+---
+
+<div class="loader" data-loader aria-hidden="true">
+  <div class="loader__can">
+    <svg viewBox="0 0 120 220" class="loader__outline">
+      <defs>
+        <clipPath id="loader-can">
+          <path d="M14 30 Q14 16 26 13 L94 13 Q106 16 106 30 L106 196 Q106 210 92 212 L28 212 Q14 210 14 196 Z"></path>
+        </clipPath>
+      </defs>
+      <g clip-path="url(#loader-can)">
+        <rect class="loader__liquid" x="0" y="0" width="120" height="220"></rect>
+      </g>
+      <path d="M14 30 Q14 16 26 13 L94 13 Q106 16 106 30 L106 196 Q106 210 92 212 L28 212 Q14 210 14 196 Z" fill="none" stroke="currentColor" stroke-width="3"></path>
+      <path d="M24 8 L96 8" stroke="currentColor" stroke-width="5" stroke-linecap="round"></path>
+    </svg>
+    <div class="loader__logo"><Logo /></div>
+  </div>
+  <p class="loader__count"><span data-loader-count>000</span><small>{loader.unit}</small></p>
+  <p class="loader__label note">{loader.label}</p>
+</div>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--paper);
+    display: none;
+  }
+  :global(html.is-loading) .loader {
+    display: grid;
+    place-items: center;
+  }
+  .loader__can {
+    position: relative;
+    width: clamp(5rem, 9vw, 7.5rem);
+  }
+  .loader__outline {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .loader__liquid {
+    fill: var(--milk);
+    transform-box: view-box;
+    transform-origin: 0 100%;
+    transform: translateY(calc((1 - var(--p, 0)) * 100%));
+  }
+  .loader__logo {
+    position: absolute;
+    left: 50%;
+    top: 52%;
+    width: 72%;
+    transform: translate(-50%, -50%);
+    color: var(--ink);
+    mix-blend-mode: normal;
+  }
+  .loader__logo :global(.logo) {
+    width: 100%;
+    height: auto;
+  }
+  .loader__count {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 1.2rem;
+    font-family: var(--f-display);
+    font-variation-settings: "wdth" 75;
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+    color: var(--lime);
+  }
+  .loader__count small {
+    font-size: 0.32em;
+    margin-left: 0.2em;
+    color: var(--paper);
+  }
+  .loader__label {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 1.6rem;
+    font-size: var(--t-small);
+    color: var(--paper-70);
+  }
+  .loader.is-leaving {
+    background: transparent;
+    transition: background 0s 0.45s;
+  }
+  .loader.is-leaving > * {
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out);
+  }
+</style>

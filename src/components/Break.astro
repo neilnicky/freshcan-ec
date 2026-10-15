@@ -1,0 +1,53 @@
+---
+import { content } from "@/content/freshcan-content";
+const { break: br } = content;
+---
+
+<section class="break" id="agarra" data-break data-theme="paper" aria-label={`${br.left} ${br.right}`}>
+  <p class="break__words section-title" data-reveal aria-hidden="true">
+    <span class="line break__left" style="--i:0"><span>{br.left}</span></span>
+    <span class="break__gap"></span>
+    <span class="line break__right" style="--i:1"><span>{br.right}</span></span>
+  </p>
+</section>
+
+<style>
+  .break {
+    position: relative;
+    height: 120vh;
+    display: grid;
+    align-items: center;
+    padding: 0 var(--gutter);
+    overflow: clip;
+  }
+  .break__words {
+    position: relative;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: 1fr minmax(16vw, 20vw) 1fr;
+    align-items: center;
+    font-size: clamp(3rem, 10.5vw, 12rem);
+  }
+  .break__left {
+    justify-self: end;
+    text-align: right;
+  }
+  .break__right {
+    justify-self: start;
+    max-width: 6ch;
+  }
+  @media (max-width: 760px) {
+    .break__words {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 38vh auto;
+      text-align: center;
+      font-size: 15vw;
+    }
+    .break__left,
+    .break__right {
+      justify-self: center;
+      text-align: center;
+      max-width: none;
+    }
+  }
+</style>

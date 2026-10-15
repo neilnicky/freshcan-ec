@@ -1,0 +1,143 @@
+---
+import { content } from "@/content/freshcan-content";
+import LiquidEdge from "./LiquidEdge.astro";
+const { manifesto } = content;
+const longest = [...manifesto.words].sort((a, b) => b.length - a.length)[0];
+---
+
+<section class="manifesto" id="manifesto" data-theme="ink" data-dark aria-label={manifesto.before}>
+  <LiquidEdge position="top" />
+  <div class="manifesto__doodles" aria-hidden="true">
+    {
+      [0, 1, 2, 3].map((i) => (
+        <svg class={`doodle doodle--${i}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="50" cy="50" r="40" />
+          <path d="M14 50 Q50 34 86 50" />
+          <circle cx="50" cy="44" r="5" />
+        </svg>
+      ))
+    }
+  </div>
+  <p class="manifesto__text section-title" data-reveal>
+    <span data-fade>{manifesto.before}</span>
+    <span class="nowrap"><span class="rotator sticker sticker--lime" data-rotator style="--rot:-3deg">
+      <span class="rotator__sizer" aria-hidden="true">{longest}</span>
+      {
+        manifesto.words.map((w, i) => (
+          <span data-word aria-hidden={i === 0 ? undefined : "true"} class:list={["rotator__word", { "is-active": i === 0 }]}>
+            {w}
+          </span>
+        ))
+      }
+    </span>,</span> <span data-fade style="--i:1">{manifesto.after}</span>
+  </p>
+  <p class="manifesto__note note" data-reveal>
+    <span data-fade style="--i:2">{manifesto.note}</span>
+    <svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M6 10 C40 6 80 18 100 48 M100 48 l-14 -4 M100 48 l2 -14"></path>
+    </svg>
+  </p>
+</section>
+
+<style>
+  .manifesto {
+    position: relative;
+    z-index: 7;
+    background: var(--ink);
+    color: var(--paper);
+    padding: clamp(6rem, 14vw, 14rem) var(--gutter) clamp(5rem, 10vw, 10rem);
+    text-align: center;
+  }
+  .manifesto__text {
+    position: relative;
+    max-width: 16ch;
+    margin-inline: auto;
+    font-size: clamp(2.4rem, 7.2vw, 8.2rem);
+    line-height: 0.92;
+  }
+  .nowrap {
+    white-space: nowrap;
+  }
+  .rotator {
+    position: relative;
+    display: inline-grid;
+    vertical-align: 0.06em;
+    padding-block: 0.02em 0;
+    margin-inline: 0.12em 0.04em;
+    overflow: hidden;
+    font-size: 0.86em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .rotator__sizer {
+    visibility: hidden;
+    grid-area: 1 / 1;
+  }
+  .rotator__word {
+    grid-area: 1 / 1;
+    transform: translateY(110%);
+    transition: transform 0.52s var(--ease-out);
+  }
+  .rotator__word.is-active {
+    transform: none;
+  }
+  .rotator__word.is-leaving {
+    transform: translateY(-110%);
+  }
+  .manifesto__note {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 3rem;
+    color: var(--lime);
+    font-size: clamp(1rem, 1.5vw, 1.4rem);
+  }
+  .manifesto__note svg {
+    width: 5rem;
+    transform: rotate(10deg);
+  }
+  .manifesto__doodles {
+    position: absolute;
+    inset: 0;
+    color: rgb(244 246 245 / 0.14);
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .doodle {
+    position: absolute;
+    width: clamp(4rem, 9vw, 9rem);
+    animation: bob 7s var(--ease-in-out) infinite alternate;
+  }
+  .doodle--0 {
+    left: 6%;
+    top: 22%;
+    transform: rotate(-20deg);
+  }
+  .doodle--1 {
+    right: 8%;
+    top: 14%;
+    animation-delay: -2s;
+  }
+  .doodle--2 {
+    left: 14%;
+    bottom: 12%;
+    animation-delay: -4s;
+  }
+  .doodle--3 {
+    right: 16%;
+    bottom: 20%;
+    animation-delay: -1s;
+  }
+  @keyframes bob {
+    to {
+      translate: 0 -1.2rem;
+      rotate: 12deg;
+    }
+  }
+  @media (max-width: 760px) {
+    .manifesto__note svg {
+      display: none;
+    }
+  }
+</style>

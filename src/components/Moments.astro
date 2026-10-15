@@ -1,0 +1,149 @@
+---
+import { content } from "@/content/freshcan-content";
+import Img from "./Img.astro";
+import Icon from "./Icon.astro";
+const { moments } = content;
+---
+
+<section class="moments" id="moments" data-theme="paper" aria-labelledby="moments-title">
+  <header class="moments__head">
+    <h2 class="section-title" id="moments-title" data-reveal>
+      <span class="line"><span>{moments.title}</span></span>
+    </h2>
+    <div class="moments__nav">
+      <span class="note moments__hint" aria-hidden="true">{moments.hint} ↔</span>
+      <button class="round-btn" type="button" data-moments-prev aria-label={moments.prev}><Icon name="arrow-left" /></button>
+      <button class="round-btn" type="button" data-moments-next aria-label={moments.next}><Icon name="arrow-right" /></button>
+    </div>
+  </header>
+  <div class="moments__viewport" data-moments>
+    <ul class="moments__track" data-moments-track>
+      {
+        moments.items.map((m, i) => (
+          <li class="mcard" data-mcard style={`--r:${(i % 2 ? 1 : -1) * 1.5}deg`}>
+            <a href={m.href} target="_blank" rel="noopener" draggable="false">
+              <div class="mcard__img">
+                <Img item={{ key: m.media, alt: "", focus: "50% 40%", source: m.href }} widths={[360, 600]} sizes="(max-width: 760px) 70vw, 22vw" />
+              </div>
+              <div class="mcard__body">
+                <span class="mcard__quote" aria-hidden="true">“</span>
+                <h3 class="mcard__title">{m.title}</h3>
+                <p class="mcard__caption">{m.caption}</p>
+                <p class="mcard__handle label">{m.handle}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .moments {
+    position: relative;
+    padding: clamp(3rem, 6vw, 6rem) 0 clamp(5rem, 9vw, 9rem);
+    overflow: clip;
+  }
+  .moments__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0 var(--gutter);
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  .moments__head .section-title {
+    font-size: clamp(2.4rem, 6.6vw, 7.6rem);
+    text-transform: none;
+  }
+  .moments__nav {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .moments__hint {
+    margin-right: 0.6rem;
+    color: var(--ink-60);
+  }
+  .moments__viewport {
+    overflow: hidden;
+    cursor: grab;
+    touch-action: pan-y;
+    padding: 1.5rem 0;
+  }
+  .moments__viewport.is-dragging {
+    cursor: grabbing;
+  }
+  .moments__track {
+    display: flex;
+    gap: clamp(0.9rem, 1.4vw, 1.4rem);
+    width: max-content;
+    padding-left: var(--gutter);
+    will-change: transform;
+  }
+  .mcard {
+    width: clamp(15rem, 24vw, 22rem);
+    flex: none;
+    rotate: var(--tilt, 0deg);
+    transition: rotate 0.6s var(--ease-out);
+  }
+  .mcard a {
+    display: grid;
+    height: 100%;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--paper);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition:
+      background 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+  .mcard a:hover,
+  .mcard a:focus-visible {
+    background: var(--lime);
+  }
+  .mcard__img {
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    border-bottom: 2px solid var(--ink);
+  }
+  .mcard__img :global(img) {
+    pointer-events: none;
+  }
+  .mcard__body {
+    position: relative;
+    padding: 1.1rem 1.2rem 1.3rem;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+  .mcard__quote {
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 0.6;
+    height: 1.2rem;
+  }
+  .mcard__title {
+    font-family: var(--f-display);
+    font-variation-settings: "wdth" 75;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 1.9vw, 1.9rem);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+  .mcard__caption {
+    font-size: var(--t-small);
+  }
+  .mcard__handle {
+    color: var(--ink-60);
+    margin-top: 0.3rem;
+  }
+  :global(html.reduced) .moments__viewport {
+    overflow-x: auto;
+  }
+</style>
