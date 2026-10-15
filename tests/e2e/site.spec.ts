@@ -146,6 +146,12 @@ test.describe("motion", () => {
     await ctx.close();
   });
 
+  test("footer game shows a crosshair cursor over the slicing area", async ({ page }) => {
+    await visit(page);
+    const game = page.locator("[data-game]");
+    await expect(game).toHaveCSS("cursor", "crosshair");
+  });
+
   test("manifesto word rotates", async ({ page }) => {
     await visit(page);
     const rot = page.locator("[data-rotator]");

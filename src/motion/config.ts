@@ -41,5 +41,5 @@ export const motion = {
 
   ruta: { morphMs: 900, wipeMs: 700 },
 
-  game: { gravity: 1500, spawnEveryMs: 900, mlPerCoconut: 25, trailMs: 180 },
+  game: { gravity: 1500, spawnEveryMs: 900, mlPerCoconut: 25, trailMs: 420, trailWidth: 15 },
 };

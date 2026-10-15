@@ -1,7 +1,7 @@
 import { content } from "@/content/freshcan-content";
 import { motion } from "./config";
 import { env, onFrame, onResize } from "./runtime";
-import { segmentDistance } from "./geometry";
+import { segmentDistance, trailRibbon, type TrailPoint } from "./geometry";
 
 /**
  * "Abre el coco": the footer slicing game. Coconuts are
@@ -65,7 +65,7 @@ export function initGame(): void {
 
   const cocos: Coco[] = [];
   const drops: Drop[] = [];
-  const trail: { x: number; y: number; t: number }[] = [];
+  const trail: TrailPoint[] = [];
   let ml = 0;
   let won = false;
   let spawnIn = 400;
@@ -237,23 +237,26 @@ export function initGame(): void {
       ctx.fill();
     }
     ctx.globalAlpha = 1;
-    if (trail.length > 1) {
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      for (let i = 1; i < trail.length; i++) {
-        const a = trail[i - 1]!;
-        const b = trail[i]!;
-        const life = 1 - (now - b.t) / cfg.trailMs;
-        ctx.strokeStyle = `rgba(244,246,245,${(life * 0.95).toFixed(3)})`;
-        ctx.shadowColor = "rgba(168,210,20,0.9)";
-        ctx.shadowBlur = 14;
-        ctx.lineWidth = 2 + life * 6;
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
+    const { left, right } = trailRibbon(trail, now, cfg.trailMs, cfg.trailWidth / 2);
+    if (left.length) {
+      ctx.beginPath();
+      for (let i = 1; i < left.length; i++) {
+        ctx.moveTo(...left[i - 1]!);
+        ctx.lineTo(...left[i]!);
+        ctx.lineTo(...right[i]!);
+        ctx.lineTo(...right[i - 1]!);
+        ctx.closePath();
       }
+      // Soft wide halo, a tight bright halo, then the crisp white blade.
+      // shadowBlur ignores the transform, so it is scaled by dpr here.
+      ctx.fillStyle = "#fff";
+      ctx.shadowColor = "rgba(255, 238, 190, 1)";
+      ctx.shadowBlur = 26 * dpr;
+      ctx.fill();
+      ctx.shadowBlur = 10 * dpr;
+      ctx.fill();
       ctx.shadowBlur = 0;
+      ctx.fill();
     }
   });
 }

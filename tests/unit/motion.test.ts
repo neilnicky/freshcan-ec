@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildKeys, levelToMl, mixPose, poseAt, sceneProgress, type Marks, type Pose } from "@/motion/track";
-import { segmentDistance } from "@/motion/geometry";
+import { segmentDistance, trailRibbon } from "@/motion/geometry";
 
 const marks: Marks = { vh: 900, sceneTop: 900, sceneHeight: 3060, breakTop: 3960, breakHeight: 1080 };
 
@@ -69,5 +69,32 @@ describe("game geometry", () => {
     expect(segmentDistance(0, 0, 10, 0, 5, 3)).toBeCloseTo(3);
     expect(segmentDistance(0, 0, 10, 0, -4, 3)).toBeCloseTo(5);
     expect(segmentDistance(2, 2, 2, 2, 5, 6)).toBeCloseTo(5);
+  });
+});
+
+describe("blade trail ribbon", () => {
+  const pts = [
+    { x: 0, y: 0, t: 0 },
+    { x: 50, y: 0, t: 200 },
+    { x: 100, y: 0, t: 400 },
+  ];
+
+  it("is empty until there are two points", () => {
+    expect(trailRibbon(pts.slice(0, 1), 400, 400, 6)).toEqual({ left: [], right: [] });
+  });
+
+  it("tapers from a full-width head to a zero-width tail", () => {
+    const { left, right } = trailRibbon(pts, 400, 400, 6);
+    expect(left).toHaveLength(3);
+    const width = (i: number) => Math.abs(left[i]![1] - right[i]![1]);
+    expect(width(0)).toBeCloseTo(0);
+    expect(width(1)).toBeCloseTo(12 * Math.SQRT1_2);
+    expect(width(2)).toBeCloseTo(12);
+  });
+
+  it("offsets along the stroke normal", () => {
+    const { left, right } = trailRibbon([{ x: 0, y: 0, t: 100 }, { x: 0, y: 10, t: 100 }], 100, 400, 5);
+    expect(left[0]).toEqual([-5, 0]);
+    expect(right[0]).toEqual([5, 0]);
   });
 });
