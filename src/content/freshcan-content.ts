@@ -76,7 +76,7 @@ export const content = {
     title: "Fresh Can — 100% agua de coco en lata transparente",
     description:
       "Fresh Can: 100% agua de coco en latas PET transparentes. 250, 330 y 500 ml. Pídela por WhatsApp o encuéntrala en The Urban Market, Samborondón.",
-    canonical: "https://freshcan.ec/",
+    canonical: "https://freshcan-ec.neilnicholaskanat.workers.dev/",
     locale: "es_EC",
     lang: "es",
     ogImage: "can-moments" as MediaKey,
